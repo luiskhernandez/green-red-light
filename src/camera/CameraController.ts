@@ -1,9 +1,9 @@
 import { CAMERA_CONSTRAINTS } from '../game/gameConfig';
-import type { CameraFailure } from '../game/gameTypes';
+import type { CameraFacing, CameraFailure } from '../game/gameTypes';
 
 /**
  * Envoltura minima sobre getUserMedia. Solo hace tres cosas: pedir la camara
- * trasera a baja resolucion, conectarla a un <video>, y apagarla.
+ * a baja resolucion, conectarla a un <video>, y apagarla.
  *
  * El video nunca sale del dispositivo: no hay grabacion, ni canvas exportado,
  * ni peticiones de red con imagenes.
@@ -28,7 +28,7 @@ export class CameraController {
     return this.stream !== null;
   }
 
-  async start(video: HTMLVideoElement): Promise<CameraStartResult> {
+  async start(video: HTMLVideoElement, facing: CameraFacing = 'BACK'): Promise<CameraStartResult> {
     if (!navigator.mediaDevices?.getUserMedia) {
       throw new CameraError('UNSUPPORTED', 'Este navegador no permite usar la camara.');
     }
@@ -36,12 +36,14 @@ export class CameraController {
     this.stop();
 
     try {
-      // 'environment' = camara trasera del iPad. Si el dispositivo solo tiene
-      // frontal, Safari entrega esa y el juego sigue funcionando.
+      // 'environment' = trasera, 'user' = frontal. Usamos `ideal` y no `exact`
+      // a proposito: si el dispositivo no tiene la camara pedida (un portatil
+      // no tiene trasera), Safari entrega la que haya y el juego sigue
+      // funcionando en vez de fallar con OverconstrainedError.
       this.stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
-          facingMode: { ideal: 'environment' },
+          facingMode: { ideal: facing === 'FRONT' ? 'user' : 'environment' },
           width: { ideal: CAMERA_CONSTRAINTS.width },
           height: { ideal: CAMERA_CONSTRAINTS.height },
           frameRate: { ideal: CAMERA_CONSTRAINTS.frameRate, max: CAMERA_CONSTRAINTS.frameRate },

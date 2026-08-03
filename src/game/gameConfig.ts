@@ -104,6 +104,8 @@ export const DEFAULT_SETTINGS: Settings = {
   matchLength: 'SHORT',
   volume: 'HIGH',
   preview: 'HIDDEN',
+  // Trasera por defecto: es el modo de juego. La frontal es para probar solo.
+  camera: 'BACK',
 };
 
 export const SETTINGS_STORAGE_KEY = 'lvlr.settings.v1';

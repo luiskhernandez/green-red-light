@@ -44,6 +44,7 @@ export function App() {
         playerBox={cameraMode === 'background' || engine.debugEnabled ? engine.playerBox : null}
         playerLocked={state.phase !== 'CALIBRATING'}
         landmarks={showLandmarks ? engine.playerPose : null}
+        mirrored={engine.mirrored}
       />
 
       {renderScreen()}
@@ -102,7 +103,9 @@ export function App() {
             calibration={engine.calibration}
             locking={state.phase === 'LOCKING_PLAYER'}
             modelLoading={engine.modelLoading}
+            frontCamera={engine.mirrored}
             onStop={actions.stop}
+            onFlipCamera={actions.flipCamera}
           />
         );
 

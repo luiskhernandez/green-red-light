@@ -21,6 +21,13 @@ interface CameraStageProps {
   playerLocked?: boolean;
   /** Landmarks: solo en calibracion o en modo desarrollador. */
   landmarks?: Pose | null;
+  /**
+   * Espejo horizontal (camara frontal). Se aplica al contenedor entero, asi el
+   * video, los landmarks y el marco del jugador se voltean juntos y siguen
+   * coincidiendo. La logica del juego no se toca: trabaja con las coordenadas
+   * originales, y el movimiento es simetrico.
+   */
+  mirrored?: boolean;
 }
 
 /**
@@ -38,6 +45,7 @@ export function CameraStage({
   playerBox = null,
   playerLocked = false,
   landmarks = null,
+  mirrored = false,
 }: CameraStageProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const visible = mode !== 'hidden';
@@ -86,7 +94,11 @@ export function CameraStage({
   }, [landmarks, drawLandmarks, mode]);
 
   return (
-    <div className={`camera-stage camera-stage--${mode}`} data-testid="camera-stage">
+    <div
+      className={`camera-stage camera-stage--${mode}${mirrored ? ' camera-stage--mirrored' : ''}`}
+      data-testid="camera-stage"
+      data-mirrored={mirrored}
+    >
       <video ref={videoRef} playsInline muted autoPlay data-testid="camera-video" />
       <canvas ref={canvasRef} />
       {visible && showZone && (

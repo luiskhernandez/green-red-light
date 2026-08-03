@@ -110,11 +110,23 @@ export type MatchLength = 'SHORT' | 'NORMAL' | 'LONG';
 export type Volume = 'MUTE' | 'LOW' | 'HIGH';
 export type PreviewMode = 'HIDDEN' | 'THUMBNAIL' | 'VISIBLE';
 
+/**
+ * Que camara usar.
+ *
+ * BACK (trasera) es el modo pensado para jugar: el niño camina hacia el iPad y
+ * el adulto ve la pantalla desde detras.
+ *
+ * FRONT (frontal) existe para poder probar el juego a solas: te ves en la
+ * pantalla mientras eres el jugador. Es un modo de prueba, no el modo de juego.
+ */
+export type CameraFacing = 'BACK' | 'FRONT';
+
 export interface Settings {
   sensitivity: Sensitivity;
   matchLength: MatchLength;
   volume: Volume;
   preview: PreviewMode;
+  camera: CameraFacing;
 }
 
 /**

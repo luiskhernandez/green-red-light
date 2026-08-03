@@ -75,6 +75,28 @@ Ajustes de confianza en certificados).
 3. El niño empieza al fondo, con el cuerpo completo dentro del encuadre.
 4. Luz uniforme; evita una ventana con sol justo detrás del niño.
 
+### Probar tú solo, sin un niño
+
+Con la cámara trasera no te ves, así que a solas es incómodo. Para probar tú
+mismo:
+
+- **Cámara frontal.** Ajustes → Cámara → **Frontal**, o el botón
+  **🔄 Usar cámara frontal** que aparece durante la calibración (más cómodo:
+  no tienes que volver al inicio si descubres que apunta al lado contrario).
+  La imagen se muestra **en espejo**, como cualquier app de selfie.
+- **Ajustes → Vista de cámara → Miniatura**, para ver durante la partida que te
+  sigue de verdad.
+- **`?debug=true`**, para ver el puntaje de movimiento en vivo mientras te
+  quedas quieto y mientras das un paso.
+
+La cámara frontal es un modo de **prueba**: el modo de juego es la trasera, con
+el adulto detrás del iPad. La elección se recuerda entre sesiones, así que
+acuérdate de volver a "Trasera" antes de jugar de verdad.
+
+Cambiar de cámara solo es posible antes de que empiece la partida: reabrir el
+stream cambia el encuadre por completo, y a mitad de partida eso perdería al
+jugador seleccionado.
+
 ---
 
 ## Instalar la PWA en el iPad
@@ -120,6 +142,9 @@ Y una fase roja **nunca** puede quitar más de un corazón.
 
 Ajustes → Sensibilidad: **Baja** (0,16), **Normal** (0,10), **Alta** (0,06).
 Números más bajos = más estricto.
+
+La cámara elegida (trasera o frontal) **no** cambia el puntaje: el movimiento se
+normaliza igual y el espejo es solo visual.
 
 ### Desde el código
 
@@ -232,12 +257,20 @@ normalizado (incluida la prueba de que el mismo movimiento puntúa igual de lejo
 que de cerca), filtrado de ruido, brazos ignorados, pérdida y recuperación del
 jugador, un adulto entrando al fondo, y requisitos de calibración.
 
-**De flujo** (`tests/`): partida completa, cuenta regresiva 5→1, penalización en
-luz roja, un solo corazón por fase roja, jugador perdido y recuperado, app en
-segundo plano, botón detener, aviso de dos personas y ajustes. Usan `?e2e=1` +
-`window.__LVLR_E2E__` para inyectar poses sintéticas (ver `tests/harness.ts`),
-así que no necesitan cámara ni descargar el modelo. `tests/screens.spec.ts`
-además guarda una captura de cada pantalla en `test-results/screens/`.
+**De flujo** (`tests/game-flow.spec.ts`): partida completa, cuenta regresiva
+5→1, penalización en luz roja, un solo corazón por fase roja, jugador perdido y
+recuperado, app en segundo plano, botón detener, aviso de dos personas y ajustes.
+Usan `?e2e=1` + `window.__LVLR_E2E__` para inyectar poses sintéticas (ver
+`tests/harness.ts`), así que no necesitan cámara ni descargar el modelo.
+`tests/screens.spec.ts` además guarda una captura de cada pantalla en
+`test-results/screens/`.
+
+**Elección de cámara** (`tests/camera-facing.spec.ts`): estas **no** usan
+`?e2e=1`, porque esa costura se salta `getUserMedia` y entonces no probarían
+nada. Sustituyen `getUserMedia` por un doble que apunta las restricciones
+recibidas, y comprueban que se pide `facingMode: 'environment'` por defecto y
+`'user'` al cambiar a frontal, que la imagen se refleja solo en frontal, y que
+la elección sobrevive a una recarga.
 
 **Sin conexión:**
 

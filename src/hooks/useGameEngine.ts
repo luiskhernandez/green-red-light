@@ -98,6 +98,8 @@ export interface GameEngine {
   playerPose: Pose | null;
   modelLoading: boolean;
   isLandscape: boolean;
+  /** true con la camara frontal: la imagen se muestra en espejo. */
+  mirrored: boolean;
   debug: DebugInfo;
   debugEnabled: boolean;
   actions: {
@@ -107,11 +109,14 @@ export interface GameEngine {
     stop: () => void;
     goHome: () => void;
     retryCamera: () => void;
+    /** Cambia entre camara trasera y frontal sin salir de la calibracion. */
+    flipCamera: () => void;
   };
 }
 
 export function useGameEngine(): GameEngine {
   const settings = useSettingsStore((s) => s.settings);
+  const updateSettings = useSettingsStore((s) => s.update);
   const isLandscape = useIsLandscape();
   const isVisible = useDocumentVisible();
   const debugEnabled = useMemo(() => isDebugEnabled(), []);
@@ -207,7 +212,7 @@ export function useGameEngine(): GameEngine {
     try {
       // La camara se pide primero para que el dialogo de permiso aparezca
       // enseguida; el modelo se descarga en paralelo.
-      const cameraStart = getCamera().start(video);
+      const cameraStart = getCamera().start(video, settingsRef.current.camera);
       const modelLoad = getDetector().load();
       await cameraStart;
       await modelLoad;
@@ -495,6 +500,26 @@ export function useGameEngine(): GameEngine {
     setState(next);
   }, [settings.matchLength]);
 
+  // Cambiar de camara con el stream abierto: hay que reabrirlo con el nuevo
+  // facingMode. Solo tiene sentido antes de que empiece la partida; si ya se
+  // eligio al jugador, reabrir la camara lo perderia.
+  const cameraFacing = settings.camera;
+  const firstFacingRender = useRef(true);
+  useEffect(() => {
+    if (firstFacingRender.current) {
+      firstFacingRender.current = false;
+      return;
+    }
+    const phase = stateRef.current.phase;
+    if (phase !== 'CALIBRATING' && phase !== 'LOCKING_PLAYER') return;
+    // Volvemos a calibrar desde cero: el encuadre cambia por completo.
+    clearPlayer();
+    if (phase === 'LOCKING_PLAYER') {
+      dispatchRef.current({ type: 'LOCK_ABORTED', now: performance.now() });
+    }
+    void startCamera();
+  }, [cameraFacing, clearPlayer, startCamera]);
+
   // --- App en segundo plano y orientacion ---------------------------------
 
   useEffect(() => {
@@ -583,8 +608,11 @@ export function useGameEngine(): GameEngine {
       stop: () => dispatchRef.current({ type: 'STOP_PRESSED', now: performance.now() }),
       goHome: () => dispatchRef.current({ type: 'GO_HOME', now: performance.now() }),
       retryCamera: () => dispatchRef.current({ type: 'RETRY_CAMERA', now: performance.now() }),
+      // El efecto de `settings.camera` se encarga de reabrir el stream.
+      flipCamera: () =>
+        updateSettings({ camera: settingsRef.current.camera === 'FRONT' ? 'BACK' : 'FRONT' }),
     }),
-    [clearPlayer],
+    [clearPlayer, updateSettings],
   );
 
   // Reanudamos solos cuando se vuelve a la app y el iPad esta horizontal.
@@ -607,6 +635,7 @@ export function useGameEngine(): GameEngine {
     playerPose,
     modelLoading,
     isLandscape,
+    mirrored: settings.camera === 'FRONT',
     debug,
     debugEnabled,
     actions,

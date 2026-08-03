@@ -1,6 +1,12 @@
 import { MATCH_DURATION_MS, MOVEMENT_THRESHOLD } from '../game/gameConfig';
 import { useSettingsStore } from '../game/settingsStore';
-import type { MatchLength, PreviewMode, Sensitivity, Volume } from '../game/gameTypes';
+import type {
+  CameraFacing,
+  MatchLength,
+  PreviewMode,
+  Sensitivity,
+  Volume,
+} from '../game/gameTypes';
 
 /** Panel para adultos. Pocas opciones, botones grandes, sin menus anidados. */
 export function SettingsPanel({ onClose }: { onClose: () => void }) {
@@ -52,6 +58,22 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
               ['HIGH', 'Alto'],
             ]}
           />
+        </Group>
+
+        <Group title="Camara">
+          <Row<CameraFacing>
+            value={settings.camera}
+            onChange={(camera) => update({ camera })}
+            options={[
+              ['BACK', 'Trasera'],
+              ['FRONT', 'Frontal'],
+            ]}
+          />
+          <p className="hint">
+            {settings.camera === 'FRONT'
+              ? 'Frontal: te ves en la pantalla, para probar el juego tu solo. Ponla junto a "Vista de camara: miniatura" para comprobar que te sigue.'
+              : 'Trasera: el modo de juego. El niño camina hacia el iPad.'}
+          </p>
         </Group>
 
         <Group title="Vista de camara durante el juego">

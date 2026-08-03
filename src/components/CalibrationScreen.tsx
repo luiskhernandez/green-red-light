@@ -6,7 +6,10 @@ interface CalibrationScreenProps {
   /** true cuando ya estamos fijando al jugador (fase LOCKING_PLAYER). */
   locking: boolean;
   modelLoading: boolean;
+  /** true si estamos usando la camara frontal. */
+  frontCamera: boolean;
   onStop: () => void;
+  onFlipCamera: () => void;
 }
 
 /**
@@ -17,7 +20,9 @@ export function CalibrationScreen({
   calibration,
   locking,
   modelLoading,
+  frontCamera,
   onStop,
+  onFlipCamera,
 }: CalibrationScreenProps) {
   return (
     <div className="screen screen--over-camera" data-testid="screen-calibration">
@@ -46,6 +51,19 @@ export function CalibrationScreen({
 
       <div className="hud hud--bottom">
         <StopButton onStop={onStop} />
+        {/*
+          Cambiar de camara aqui y no solo en Ajustes: si estas montando el iPad
+          tu solo, no tiene sentido volver al inicio para descubrir que la
+          camara apunta al lado contrario.
+        */}
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={onFlipCamera}
+          data-testid="flip-camera-button"
+        >
+          🔄 {frontCamera ? 'Usar cámara trasera' : 'Usar cámara frontal'}
+        </button>
       </div>
     </div>
   );

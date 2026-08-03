@@ -440,6 +440,15 @@ button {
   opacity: 0;
 }
 
+/*
+ * Camara frontal en espejo, como cualquier app de selfie: si te mueves a tu
+ * derecha, la imagen se mueve a la derecha. Se voltea el contenedor completo
+ * para que los landmarks y el marco del jugador acompañen al video.
+ */
+.camera-stage--mirrored {
+  transform: scaleX(-1);
+}
+
 .camera-stage video,
 .camera-stage canvas {
   position: absolute;
