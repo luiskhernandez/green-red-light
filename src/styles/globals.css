@@ -1,0 +1,627 @@
+/*
+ * Estetica infantil original: formas redondas, alto contraste, tipografia
+ * grande. Nada de texto pequeño y ningun elemento tomado de una serie.
+ */
+
+:root {
+  --ink: #12203a;
+  --paper: #fff8ec;
+  --night: #0f172a;
+  --green: #17b978;
+  --green-deep: #0b8f5a;
+  --red: #e8453c;
+  --red-deep: #b32219;
+  --sun: #ffc93c;
+  --sky: #4bb6f5;
+  --grape: #7d5fff;
+
+  --radius: 2rem;
+  --shadow: 0 0.75rem 0 rgba(0, 0, 0, 0.18);
+
+  /* Escala tipografica basada en el viewport: en iPad todo se ve enorme. */
+  --step-0: clamp(1.15rem, 2.2vw, 1.6rem);
+  --step-1: clamp(1.5rem, 3.2vw, 2.4rem);
+  --step-2: clamp(2rem, 5vw, 4rem);
+  --step-3: clamp(3rem, 9vw, 7rem);
+  --step-huge: clamp(8rem, 40vh, 24rem);
+
+  font-family: 'Nunito', 'Avenir Next Rounded', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * Margenes de bloque a cero. Con tipografias de 300 px el margen por defecto
+ * de <p> (1em) expulsa el resto de la pantalla fuera del viewport; el espaciado
+ * lo controla el `gap` de .screen.
+ */
+h1,
+h2,
+h3,
+p,
+ol,
+ul,
+pre {
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--night);
+  /* El juego es de un solo toque: nada de seleccionar texto por accidente. */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Contenedor de pantalla ------------------------------------------------ */
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vh, 1.75rem);
+  padding: max(1rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right))
+    max(1rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+  text-align: center;
+  transition: background-color 220ms ease;
+}
+
+.screen--start {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 201, 60, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 75%, rgba(75, 182, 245, 0.35), transparent 45%),
+    var(--paper);
+}
+
+.screen--calibrating {
+  background: var(--night);
+  color: var(--paper);
+}
+
+.screen--countdown {
+  background: linear-gradient(160deg, var(--grape), #3d2b8f);
+  color: var(--paper);
+}
+
+.screen--green {
+  background: radial-gradient(circle at 50% 30%, #3ddc97, var(--green-deep));
+  color: #04301f;
+}
+
+.screen--red {
+  background: radial-gradient(circle at 50% 30%, #ff6b5f, var(--red-deep));
+  color: #3d0704;
+}
+
+.screen--warning {
+  background: radial-gradient(circle at 50% 30%, var(--sun), #e09a00);
+  color: #43300a;
+}
+
+.screen--lost {
+  background: linear-gradient(160deg, #22304d, var(--night));
+  color: var(--paper);
+}
+
+.screen--result {
+  background:
+    radial-gradient(circle at 30% 15%, rgba(255, 201, 60, 0.4), transparent 50%),
+    var(--paper);
+}
+
+.screen--error {
+  background: var(--night);
+  color: var(--paper);
+}
+
+/* --- Tipografia ----------------------------------------------------------- */
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 900;
+  line-height: 0.95;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.headline {
+  font-size: var(--step-2);
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.05;
+}
+
+.lead {
+  font-size: var(--step-1);
+  font-weight: 700;
+  margin: 0;
+  max-width: 34ch;
+}
+
+.note {
+  font-size: var(--step-0);
+  font-weight: 600;
+  margin: 0;
+  max-width: 44ch;
+  opacity: 0.85;
+}
+
+.light-word {
+  font-size: var(--step-3);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* --- Botones -------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 4.5rem;
+  min-width: 11rem;
+  padding: 1rem 2.25rem;
+  border-radius: var(--radius);
+  font-size: var(--step-1);
+  font-weight: 900;
+  background: var(--sun);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+}
+
+.btn:active {
+  transform: translateY(0.3rem);
+  filter: brightness(0.95);
+}
+
+.btn--huge {
+  min-height: 6.5rem;
+  min-width: 18rem;
+  font-size: var(--step-2);
+  border-radius: 3rem;
+}
+
+.btn--primary {
+  background: var(--green);
+  color: #04301f;
+}
+
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  box-shadow: none;
+  border: 0.2rem solid currentColor;
+}
+
+/*
+ * Detener aparece sobre fondo rojo, verde, amarillo y azul oscuro. El borde
+ * claro lo separa del fondo en todos los casos, sobre todo en la luz roja.
+ */
+.btn--danger {
+  background: var(--red);
+  color: #fff;
+  border: 0.22rem solid var(--paper);
+}
+
+/*
+ * "Llegó" usa azul cielo: es el unico color de la paleta que contrasta con las
+ * tres pantallas de juego (verde, rojo y amarillo).
+ */
+.btn--go {
+  background: var(--sky);
+  color: #052538;
+  border: 0.22rem solid var(--paper);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  justify-content: center;
+}
+
+/* --- Barra superior e inferior del juego ---------------------------------- */
+
+.hud {
+  position: fixed;
+  left: max(1rem, env(safe-area-inset-left));
+  right: max(1rem, env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.hud--top {
+  top: max(0.75rem, env(safe-area-inset-top));
+}
+
+.hud--bottom {
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.hud > * {
+  pointer-events: auto;
+}
+
+.hearts {
+  display: flex;
+  gap: 0.4rem;
+  font-size: clamp(2rem, 5vh, 3.25rem);
+  line-height: 1;
+}
+
+.heart {
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease;
+}
+
+.heart--lost {
+  opacity: 0.28;
+  transform: scale(0.8);
+}
+
+.time-pill {
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  font-size: var(--step-0);
+  font-weight: 800;
+  color: inherit;
+}
+
+/* --- Semaforo / personaje ------------------------------------------------- */
+
+.mascot {
+  width: clamp(9rem, 28vh, 18rem);
+  height: clamp(9rem, 28vh, 18rem);
+  flex-shrink: 0;
+}
+
+/* Portada: el personaje al lado del titulo. */
+.start-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+.start-hero .mascot {
+  width: clamp(6rem, 20vh, 11rem);
+  height: clamp(6rem, 20vh, 11rem);
+}
+
+.mascot--walking {
+  animation: bob 900ms ease-in-out infinite;
+}
+
+.mascot--frozen {
+  animation: none;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-0.6rem) rotate(1.5deg);
+  }
+}
+
+/*
+ * Latido de invitacion. Anima un resplandor, NO un transform: el boton no
+ * cambia de tamaño ni de sitio, asi un niño pequeño no le apunta a un blanco
+ * en movimiento.
+ */
+.pulse {
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow:
+      var(--shadow),
+      0 0 0 0 rgba(23, 185, 120, 0.55);
+  }
+  50% {
+    box-shadow:
+      var(--shadow),
+      0 0 0 1.25rem rgba(23, 185, 120, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot--walking,
+  .pulse {
+    animation: none;
+  }
+}
+
+/* --- Cuenta regresiva ----------------------------------------------------- */
+
+.countdown-number {
+  font-size: var(--step-huge);
+  font-weight: 900;
+  line-height: 0.8;
+  /* Sin margin:0 el margen por defecto de <p> es 1em = cientos de px y
+     empuja el resto de la pantalla fuera del viewport. */
+  margin: 0;
+  animation: pop 320ms ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.45);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- Camara ---------------------------------------------------------------
+ * El escenario de camara se monta una sola vez y solo cambia de tamaño con
+ * estas clases. Nunca se desmonta: si se desmontara, Safari perderia el
+ * stream y habria que volver a pedir permiso.
+ */
+
+.camera-stage {
+  position: fixed;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+  pointer-events: none;
+}
+
+/* Fondo a pantalla completa: la interfaz se dibuja encima. */
+.camera-stage--background {
+  inset: 0;
+  z-index: 0;
+}
+
+.camera-stage--thumb,
+.camera-stage--large {
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(6.5rem, calc(env(safe-area-inset-bottom) + 6.5rem));
+  aspect-ratio: 4 / 3;
+  border: 0.25rem solid rgba(255, 255, 255, 0.7);
+  border-radius: 1.25rem;
+  z-index: 6;
+}
+
+.camera-stage--thumb {
+  width: min(26vw, 14rem);
+}
+
+.camera-stage--large {
+  width: min(44vw, 26rem);
+}
+
+/* Oculto pero presente: 1px fuera de la vista, sin repintar nada. */
+.camera-stage--hidden {
+  width: 2px;
+  height: 2px;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+}
+
+.camera-stage video,
+.camera-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+ * Pantallas que se dibujan sobre la camara. El velo es fuerte a proposito: el
+ * texto tiene que leerse igual sobre una pared blanca o sobre una sombra.
+ */
+.screen--over-camera {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(15, 23, 42, 0.55) 45%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
+  color: var(--paper);
+  z-index: 1;
+  text-shadow: 0 0.15rem 0.6rem rgba(0, 0, 0, 0.6);
+  /* Deja libre la franja inferior donde vive el HUD. */
+  padding-bottom: max(7rem, calc(env(safe-area-inset-bottom) + 7rem));
+}
+
+.camera-zone {
+  position: absolute;
+  inset: 5% 20%;
+  border: 0.35rem dashed rgba(255, 255, 255, 0.6);
+  border-radius: 1.25rem;
+  pointer-events: none;
+}
+
+.camera-zone--ready {
+  border-color: var(--green);
+  border-style: solid;
+}
+
+.player-frame {
+  position: absolute;
+  border: 0.35rem solid var(--sun);
+  border-radius: 0.9rem;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  transition:
+    left 90ms linear,
+    top 90ms linear,
+    width 90ms linear,
+    height 90ms linear;
+}
+
+.player-frame--locked {
+  border-color: var(--green);
+}
+
+/* --- Ajustes ------------------------------------------------------------- */
+
+.panel {
+  width: min(100%, 52rem);
+  max-height: 82vh;
+  overflow-y: auto;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: clamp(1.25rem, 3vh, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vh, 1.5rem);
+  box-shadow: var(--shadow);
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: left;
+}
+
+.option-group > h3 {
+  font-size: var(--step-1);
+  margin: 0;
+}
+
+.option-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  flex: 1 1 8rem;
+  min-height: 3.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1.5rem;
+  background: #fff;
+  border: 0.25rem solid rgba(18, 32, 58, 0.15);
+  font-size: var(--step-0);
+  font-weight: 800;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--grape);
+  border-color: var(--grape);
+  color: #fff;
+}
+
+.hint {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* --- Overlays ----------------------------------------------------------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.88);
+  color: var(--paper);
+  backdrop-filter: blur(4px);
+}
+
+.debug {
+  position: fixed;
+  top: max(0.5rem, env(safe-area-inset-top));
+  left: max(0.5rem, env(safe-area-inset-left));
+  z-index: 30;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.9rem;
+  background: rgba(0, 0, 0, 0.72);
+  color: #7dffb0;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  text-align: left;
+  pointer-events: none;
+  white-space: pre;
+}
+
+.debug--warn {
+  color: var(--sun);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: var(--step-0);
+  font-weight: 800;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 0.35rem solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--sun);
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.install-list {
+  text-align: left;
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.6;
+  max-width: 40ch;
+  margin: 0;
+  padding-left: 1.4rem;
+}
