@@ -1,0 +1,54 @@
+---
+layout: runbook
+title: '#4471 split · three problems, not one'
+owner: Luis C Hernandez M
+status: proposed
+reviewed: 2026-10-29
+signature: Luis C Hernandez M
+---
+
+<script>
+  import TicketSplit from '#lib/kb/TicketSplit.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const REPO = 'https://github.com/luiskhernandez/green-red-light/issues';
+  const issues = { parser: `${REPO}/1`, hint: `${REPO}/2`, 'one-day': `${REPO}/3` };
+  const labels = {
+    parser: 'shared parser reads day-first dates month first',
+    hint: 'booking-v3 form hint says MM/DD/YYYY to day-first tenants',
+    'one-day': 'date moves by one day: time zone, not a swap',
+  };
+</script>
+
+[#4471](/kb/incidents/4471) says one issue, one fix. Read the reports and they describe three
+problems. Each one now has its own ticket, and each needs its own fix.
+
+<Callout kind="warn">
+The parser fix queued for #4471 fixes only the first row below. The other two stay broken after it ships.
+</Callout>
+
+## The split
+
+<TicketSplit ticket={4471} {issues} {labels} />
+
+## How each report was placed
+
+1. **One-day move.** The desk marked these in `desk-notes.json`. A day/month swap never moves a
+   date by one day. In these reports the date moves by one day, or people in two time zones see
+   two different days for one meeting. They go to their own
+   ticket, not under the tenant's cause.
+2. **Hint.** The report came in through the booking form, and the tenant runs `booking-v3`. That form
+   prints `MM/DD/YYYY` to tenants who write the day first, so people type the month first as told.
+3. **Parser.** Everything else from a day-first tenant: the shared parser reads the date month first.
+
+The cause comes from the tenant and the way the report came in (`causes.ts`), not from intake's tag.
+Intake guesses from the reporter's browser locale.
+
+## Why #4471 grew to one ticket
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line alone. All three
+problems produce the same subjects ("Wrong day on the invite", "Date is wrong"), so all three merged
+into one ticket and the count hid two of them.
+
+<RenderStamp {signature} />
