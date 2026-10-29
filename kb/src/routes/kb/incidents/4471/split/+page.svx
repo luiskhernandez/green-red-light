@@ -19,18 +19,22 @@ signature: Luis C Hernandez M
     hint: 'booking-v3 form hint says MM/DD/YYYY to day-first tenants',
     'one-day': 'date moves by one day: time zone, not a swap',
   };
+  // Engineering update on #4471, closed 5 Oct.
+  const status = { parser: 'fixed', hint: "won't fix", 'one-day': 'open' };
 </script>
 
 [#4471](/kb/incidents/4471) says one issue, one fix. Read the reports and they describe three
 problems. Each one now has its own ticket, and each needs its own fix.
 
 <Callout kind="warn">
-The parser fix queued for #4471 fixes only the first row below. The other two stay broken after it ships.
+Engineering closed #4471 on 5 October. The parser is fixed ("fix(dates): parse dd/mm for eu locales").
+The hint problem is won't fix: the booking-v3 form is retired. The one-day problem is still open:
+neither change touches it.
 </Callout>
 
 ## The split
 
-<TicketSplit ticket={4471} {issues} {labels} />
+<TicketSplit ticket={4471} {issues} {labels} {status} />
 
 ## How each report was placed
 
