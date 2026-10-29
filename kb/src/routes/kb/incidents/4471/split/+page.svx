@@ -4,7 +4,7 @@ title: '#4471 split · three problems, not one'
 owner: Luis C Hernandez M
 status: proposed
 reviewed: 2026-10-29
-signature: Luis C Hernandez M
+signature: 'v1.eyJzdWIiOiIxNjcyIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMzMTA0NzIsImV4cCI6MTc5MzM5Njg3Mn0.bPlTgwFx7kOmluA75o4rIIG7s5nz58f2VgBg1Ip6StE'
 ---
 
 <script>
